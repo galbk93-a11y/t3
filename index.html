@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>חקירת פונקציה – שורש במכנה ופרמטר</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#1c2233;--mute:#5b6478;--line:#d9dde8;--acc:#2f5de0;--acc2:#d9462f;--ok:#1b8a5a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151f;--card:#1b2030;--ink:#e8ebf5;--mute:#9aa3ba;--line:#2e3550;--acc:#7b9bff;--acc2:#ff8a73;--ok:#5fd6a0}}
+:root[data-theme="dark"]{--bg:#12151f;--card:#1b2030;--ink:#e8ebf5;--mute:#9aa3ba;--line:#2e3550;--acc:#7b9bff;--acc2:#ff8a73;--ok:#5fd6a0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Heebo","Segoe UI",Arial,sans-serif;line-height:1.7}
+main{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.5rem;margin:8px 0 4px}
+.sub{color:var(--mute);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0}
+.card h2{font-size:1.1rem;margin:0 0 10px;color:var(--acc)}
+.fn,.eq{direction:ltr;text-align:center;margin:10px 0;overflow-x:auto}
+.fn math,.eq math{font-size:1.5em}
+.m{direction:ltr;unicode-bidi:isolate;display:inline-block;font-family:"Times New Roman",serif;font-size:1.05em}
+ol.q{padding-inline-start:1.4em;margin:0}
+ol.q li{margin:8px 0}
+button.big{display:block;width:100%;padding:14px;font-size:1.05rem;font-family:inherit;border:0;border-radius:12px;background:var(--acc);color:#fff;cursor:pointer;margin:18px 0}
+#sol{display:none}
+.step{border-inline-start:4px solid var(--acc);padding:2px 14px;margin:12px 0}
+.step b.t{color:var(--acc)}
+.res{color:var(--ok);font-weight:600}
+svg{width:100%;height:auto;display:block;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.ctrl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0}
+input[type=range]{flex:1;min-width:160px}
+.legend{font-size:.9rem;color:var(--mute);margin-top:6px}
+table.t{border-collapse:collapse;margin:10px auto;direction:ltr}table.t td,table.t th{border:1px solid var(--line);padding:4px 12px;text-align:center}table.t th{background:var(--bg)}
+</style>
+
+</head>
+<body>
+<main>
+<h1>חקירת פונקציה – שורש במכנה ופרמטר</h1>
+<p class="sub">כיתה י"א, 5 יחידות לימוד · חור, אסימפטוטה אנכית וקיצון</p>
+
+<div class="card">
+<h2>התרגיל</h2>
+<p>נתונה הפונקציה (כאשר <span class="m">a &gt; 0</span> פרמטר):</p>
+<div class="fn"><math display="block"><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><msup><mi>x</mi><mn>2</mn></msup><mrow><mi>x</mi><mo>−</mo><mi>a</mi><msqrt><mi>x</mi></msqrt></mrow></mfrac></math></div>
+<p>ידוע שלגרף הפונקציה יש אסימפטוטה אנכית ב-<span class="m">x = 4</span>.</p>
+<ol class="q">
+<li>מצאו את <span class="m">a</span>. בהמשך התרגיל הציבו את הערך שמצאתם.</li>
+<li>מצאו את תחום ההגדרה של הפונקציה.</li>
+<li>מצאו את הנקודה שבה יש "חור" בגרף הפונקציה. מהן קואורדינטותיה?</li>
+<li>מצאו את האסימפטוטות האנכיות, וחקרו את התנהגות הפונקציה כאשר <span class="m">x → ∞</span>.</li>
+<li>מצאו את נקודות החיתוך עם הצירים ואת תחומי החיוביות והשליליות.</li>
+<li>גזרו את הפונקציה, ומצאו תחומי עלייה וירידה ונקודות קיצון.</li>
+<li>סרטטו סקיצה של גרף הפונקציה, תוך סימון החור, האסימפטוטה והקיצון.</li>
+<li>(אתגר) לכמה פתרונות יש המשוואה <span class="m">f(x) = k</span> בהתאם לערך <span class="m">k</span>?</li>
+</ol>
+</div>
+
+<button class="big" id="btn">הצג פתרון מלא</button>
+
+<div id="sol">
+<div class="card">
+<h2>פתרון מלא</h2>
+
+<div class="step"><b class="t">א. מציאת a</b><br>
+המכנה: <span class="m">x − a√x = √x(√x − a)</span>, והוא מתאפס ב-<span class="m">x = 0</span> וב-<span class="m">x = a²</span>.<br>
+ב-<span class="m">x = a²</span> המונה <span class="m">a⁴ ≠ 0</span>, ולכן שם אסימפטוטה אנכית. מהנתון <span class="m">a² = 4</span>, ומכיוון ש-<span class="m">a &gt; 0</span>:<br>
+<span class="res">a = 2, כלומר f(x) = x² / (x − 2√x).</span></div>
+
+<div class="step"><b class="t">ב. תחום הגדרה</b><br>
+תנאי השורש: <span class="m">x ≥ 0</span>. תנאי המכנה: <span class="m">√x(√x − 2) ≠ 0 ⇒ x ≠ 0, x ≠ 4</span>.<br>
+<span class="res">תחום: (0, 4) ∪ (4, ∞).</span></div>
+
+<div class="step"><b class="t">ג. מציאת החור בעזרת הצבות</b><br>
+נבדוק את הנקודות שבהן המכנה מתאפס: <span class="m">x = 0</span> ו-<span class="m">x = 4</span>.<br>
+<b>x = 4:</b> הצבה במונה נותנת <span class="m">4² = 16 ≠ 0</span> והמכנה מתאפס, כלומר <span class="m">16/0</span>. זה מצביע על אסימפטוטה ולא על חור.<br>
+<b>x = 0:</b> הצבה נותנת <span class="m">0/0</span>, ולכן ייתכן חור. נבדוק מה קורה לפונקציה כשמתקרבים ל-0 (מימין בלבד, כי משמאל היא לא מוגדרת), על ידי הצבת ערכים קרובים:
+<table class="t"><tr><th>x</th><th>√x</th><th>f(x)</th></tr>
+<tr><td>0.1</td><td>0.316</td><td>−1.88·10⁻²</td></tr>
+<tr><td>0.01</td><td>0.1</td><td>−5.26·10⁻⁴</td></tr>
+<tr><td>0.001</td><td>0.0316</td><td>−1.61·10⁻⁵</td></tr>
+<tr><td>0.0001</td><td>0.01</td><td>−5.03·10⁻⁷</td></tr></table>
+ככל ש-<span class="m">x</span> מתקרב ל-0, הערכים <span class="m">f(x)</span> מתקרבים ל-0.<br>
+<span class="res">הגבול ב-x = 0 הוא 0, והפונקציה לא מוגדרת שם, ולכן יש חור בראשית הצירים (0, 0).</span></div>
+
+<div class="step"><b class="t">ד. אסימפטוטות והתנהגות באינסוף</b><br>
+<b>אנכית:</b> ב-<span class="m">x = 4</span> המונה <span class="m">16 ≠ 0</span> והמכנה מתאפס (כפי שמצאנו בסעיף ג). כדי לקבוע את הסימן נפרק את המכנה: <span class="m">x − 2√x = √x(√x − 2)</span>.<br>
+<span class="m">x → 4⁻: √x − 2 → 0⁻</span>, ולכן <span class="m">f → 16/0⁻ = −∞</span> · <span class="m">x → 4⁺: f → 16/0⁺ = +∞</span><br>
+<span class="res">אסימפטוטה אנכית: x = 4 (משני הצדדים).</span><br>
+<b>באינסוף:</b> <span class="m">f(x)/x = x/(x − 2√x) → 1</span>, כלומר <span class="m">f(x) ≈ x → ∞</span>, ולכן אין אסימפטוטה אופקית.<br>
+בדיקת אסימפטוטה משופעת: <span class="m">f(x) − x = 2x√x/(x − 2√x)</span>, ובחלוקה ב-<span class="m">x</span> מתקבל <span class="m">2√x/(1 − 2/√x) → ∞</span>. הפער גדל, ולכן גם אין אסימפטוטה משופעת.</div>
+
+<div class="step"><b class="t">ה. חיתוכים וסימן</b><br>
+ציר y: <span class="m">x = 0</span> לא בתחום (זה החור). ציר x: המונה <span class="m">x² = 0</span> רק ב-<span class="m">x = 0</span>, שגם הוא החור.<br>
+המונה <span class="m">x² &gt; 0</span> בתחום, והמכנה <span class="m">√x(√x − 2)</span> נקבע לפי <span class="m">√x − 2</span>:<br>
+<span class="res">f &lt; 0 עבור 0 &lt; x &lt; 4 · f &gt; 0 עבור x &gt; 4 · אין חיתוכים עם הצירים.</span></div>
+
+<div class="step"><b class="t">ו. נגזרת וקיצון</b><br>
+גוזרים בכלל המנה את <span class="m">f(x) = x² / (x − 2√x)</span>. נגזרת המכנה: <span class="m">1 − 1/√x</span>.
+<div class="eq"><math display="block"><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mn>2</mn><mi>x</mi><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><msqrt><mi>x</mi></msqrt><mo>)</mo><mo>−</mo><msup><mi>x</mi><mn>2</mn></msup><mo>(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><msqrt><mi>x</mi></msqrt></mfrac><mo>)</mo></mrow><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><msqrt><mi>x</mi></msqrt><mo>)</mo></mrow><mn>2</mn></msup></mfrac><mo>=</mo><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>3</mn><mi>x</mi><msqrt><mi>x</mi></msqrt></mrow><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><msqrt><mi>x</mi></msqrt><mo>)</mo></mrow><mn>2</mn></msup></mfrac></math></div>
+מפרקים: המונה <span class="m">x√x(√x − 3)</span> והמכנה <span class="m">x(√x − 2)²</span>, ולכן <span class="m">f′(x) = √x(√x − 3)/(√x − 2)²</span>.<br>
+המכנה חיובי, והסימן נקבע לפי <span class="m">√x − 3</span>. הנגזרת מתאפסת ב-<span class="m">x = 9</span>.<br>
+<span class="res">יורדת ב-(0, 4) וב-(4, 9) · עולה ב-(9, ∞) · מינימום ב-(9, 27).</span><br>
+(חישוב: <span class="m">f(9) = 81/(9 − 6) = 27</span>.)</div>
+
+<div class="step"><b class="t">ז. סקיצת הגרף</b><br>
+ענף שמאלי: יוצא מהחור (0, 0), יורד דרך (1, −1) ו-(3, −19.4), וצולל ל-−∞ ליד x=4.<br>
+ענף ימני: יורד מ-+∞ ליד x=4 עד המינימום (9, 27), ואז עולה לאינסוף.<br>
+הגרף מצויר מהנוסחה עצמה:</div>
+
+<svg id="g" viewBox="0 0 640 420" role="img" aria-label="גרף הפונקציה"></svg>
+<div class="legend">קו כחול: הפונקציה · מקווקו: האסימפטוטה x=4 · עיגול ריק: החור (0, 0) · נקודה: המינימום (9, 27) · קו צהוב: y = k (סעיף ח)</div>
+
+<div class="step" style="margin-top:16px"><b class="t">ח. פתרון f(x) = k</b><br>
+בענף השמאלי הפונקציה יורדת מ-0 ל-−∞ (הערך 0 לא מתקבל, כי הוא החור). בענף הימני היא יורדת מ-∞ ל-27 ואז עולה בחזרה ל-∞.<br>
+<span class="res">k &lt; 0: פתרון אחד · 0 ≤ k &lt; 27: אין פתרון · k = 27: פתרון אחד (x = 9) · k &gt; 27: שני פתרונות.</span><br>
+הזיזו את המחוון ובדקו:</div>
+<div class="ctrl">
+<label for="k">k = <b id="kv">40.0</b></label>
+<input type="range" id="k" min="-30" max="70" step="0.5" value="40">
+</div>
+<div id="kres" class="res"></div>
+</div>
+</div>
+</main>
+
+<script>
+(function(){
+var NS="http://www.w3.org/2000/svg";
+var svg=document.getElementById("g");
+var X0=-2,X1=22,Y0=-30,Y1=70,L=40,R=620,T=20,B=380;
+function sx(x){return L+(x-X0)*(R-L)/(X1-X0)}
+function sy(y){return B-(y-Y0)*(B-T)/(Y1-Y0)}
+function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
+function f(x){return x*x/(x-2*Math.sqrt(x))}
+var defs=el("defs",{});
+var cp=el("clipPath",{id:"c"},defs);
+el("rect",{x:L,y:T,width:R-L,height:B-T},cp);
+var i,v;
+for(i=X0;i<=X1;i++){el("line",{x1:sx(i),y1:T,x2:sx(i),y2:B,stroke:"var(--line)","stroke-width":i===0?1.6:.5});
+ if(i!==0&&i%2===0){var t=el("text",{x:sx(i),y:sy(0)+14,"text-anchor":"middle","font-size":11,fill:"var(--mute)"});t.textContent=i}}
+for(v=Y0;v<=Y1;v+=10){el("line",{x1:L,y1:sy(v),x2:R,y2:sy(v),stroke:"var(--line)","stroke-width":v===0?1.6:.5});
+ if(v!==0){var t2=el("text",{x:sx(0)-6,y:sy(v)+4,"text-anchor":"end","font-size":11,fill:"var(--mute)"});t2.textContent=v}}
+el("line",{x1:sx(4),y1:T,x2:sx(4),y2:B,stroke:"var(--acc2)","stroke-width":1.6,"stroke-dasharray":"6 5"});
+var d1="",d2="",x,j;
+function add(d,x){return d+(d?"L":"M")+sx(x).toFixed(1)+" "+sy(f(x)).toFixed(1)}
+for(x=0.01;x<3.5;x+=0.02){d1=add(d1,x)}
+for(j=0;j<220;j++){d1=add(d1,4-0.5*Math.pow(0.95,j))}
+for(j=0;;j++){x=4+0.003*Math.pow(1.03,j);if(x>X1)break;d2=add(d2,x)}
+var g=el("g",{"clip-path":"url(#c)"});
+el("path",{d:d1,fill:"none",stroke:"var(--acc)","stroke-width":2.6},g);
+el("path",{d:d2,fill:"none",stroke:"var(--acc)","stroke-width":2.6},g);
+el("circle",{cx:sx(0),cy:sy(0),r:5,fill:"var(--card)",stroke:"var(--acc)","stroke-width":2.4});
+el("circle",{cx:sx(9),cy:sy(27),r:4.5,fill:"var(--ok)"});
+var lb=el("text",{x:sx(9)+8,y:sy(27)+16,"font-size":12,fill:"var(--ink)"});lb.textContent="(9, 27)";
+var lh=el("text",{x:sx(0)+8,y:sy(0)-8,"font-size":12,fill:"var(--ink)"});lh.textContent="(0, 0)";
+var l1=el("text",{x:sx(4)+6,y:T+14,"font-size":12,fill:"var(--acc2)"});l1.textContent="x = 4";
+var kl=el("line",{x1:L,x2:R,stroke:"#d4a017","stroke-width":2},g);
+var kp1=el("circle",{r:5,fill:"#d4a017"},g);
+var kp2=el("circle",{r:5,fill:"#d4a017"},g);
+var ks=document.getElementById("k"),kv=document.getElementById("kv"),kr=document.getElementById("kres");
+function bis(lo,hi,k,dec){var m,n;for(n=0;n<200;n++){m=(lo+hi)/2;if((f(m)>k)===dec)lo=m;else hi=m}return(lo+hi)/2}
+function put(p,x,k){p.setAttribute("cx",x===null?-50:sx(x));p.setAttribute("cy",x===null?-50:sy(k))}
+function upd(){
+ var k=parseFloat(ks.value),xs,x1,x2;kv.textContent=k.toFixed(1);
+ kl.setAttribute("y1",sy(k));kl.setAttribute("y2",sy(k));put(kp1,null);put(kp2,null);
+ if(k<0){xs=bis(1e-9,4-1e-9,k,true);put(kp1,xs,k);kr.textContent="פתרון אחד: x ≈ "+xs.toFixed(3)+" (בענף השמאלי)";return}
+ if(k<27){kr.textContent=k===0?"k = 0: אין פתרון (הערך 0 נבלע בחור).":"אין פתרון (הפונקציה לא מקבלת ערכים בין 0 ל-27).";return}
+ if(k===27){put(kp1,9,27);kr.textContent="פתרון אחד: x = 9 (המינימום)";return}
+ x1=bis(4+1e-9,9,k,true);x2=bis(9,1e6,k,false);put(kp1,x1,k);put(kp2,x2,k);
+ kr.textContent="שני פתרונות: x ≈ "+x1.toFixed(3)+" ו-x ≈ "+x2.toFixed(3);
+}
+ks.addEventListener("input",upd);upd();
+var btn=document.getElementById("btn"),sol=document.getElementById("sol");
+btn.addEventListener("click",function(){
+ var open=sol.style.display==="block";
+ sol.style.display=open?"none":"block";
+ btn.textContent=open?"הצג פתרון מלא":"הסתר פתרון";
+ if(!open)sol.scrollIntoView({behavior:"smooth"});
+});
+})();
+</script>
+</body>
+</html>
